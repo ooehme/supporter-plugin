@@ -4,37 +4,37 @@ function supporter_form_shortcode() {
     
     if (isset($_GET['supporter_submitted']) && $_GET['supporter_submitted'] == '1') {
         echo '<div class="supporter-message">Vielen Dank für Ihre Unterstützung! Ihr Eintrag wird überprüft.</div>';
+    } else {
+        ?>
+        <form action="" method="post" class="supporter-form">
+            <?php wp_nonce_field('submit_supporter_form', 'supporter_form_nonce'); ?>
+            <label for="name">Name:</label>
+            <input type="text" name="name" required><br>
+            
+            <label for="email">E-Mail:</label>
+            <input type="email" name="email" required><br>
+            
+            <label for="phone">Telefonnummer (optional):</label>
+            <input type="text" name="phone"><br>
+            
+            <label for="occupation">Tätigkeit:</label>
+            <input type="text" name="occupation" required><br>
+            
+            <label for="region">Region:</label>
+            <input type="text" name="region" required><br>
+            
+            <label for="message">Nachricht:</label>
+            <textarea name="message" required></textarea><br>
+            
+            <label for="agreement">
+                <input type="checkbox" name="agreement" required>
+                Ich bin mit der Veröffentlichung meines Namens, meiner Tätigkeit und Region einverstanden.
+            </label><br>
+            
+            <input type="submit" name="submit_supporter" value="Absenden">
+        </form>
+        <?php
     }
-    
-    ?>
-    <form action="" method="post">
-        <?php wp_nonce_field('submit_supporter_form', 'supporter_form_nonce'); ?>
-        <label for="name">Name:</label>
-        <input type="text" name="name" required><br>
-        
-        <label for="email">E-Mail:</label>
-        <input type="email" name="email" required><br>
-        
-        <label for="phone">Telefonnummer (optional):</label>
-        <input type="text" name="phone"><br>
-        
-        <label for="occupation">Tätigkeit:</label>
-        <input type="text" name="occupation" required><br>
-        
-        <label for="region">Region:</label>
-        <input type="text" name="region" required><br>
-        
-        <label for="message">Nachricht:</label>
-        <textarea name="message" required></textarea><br>
-        
-        <label for="agreement">
-            <input type="checkbox" name="agreement" required>
-            Ich bin mit der Veröffentlichung meines Namens, meiner Tätigkeit und Region einverstanden.
-        </label><br>
-        
-        <input type="submit" name="submit_supporter" value="Absenden">
-    </form>
-    <?php
     return ob_get_clean();
 }
 add_shortcode('supporter_form', 'supporter_form_shortcode');
@@ -91,44 +91,18 @@ function process_supporter_form() {
             )
         );
 
-        // Bestätigungsmail mit einem echten Link senden
-        $confirmation_link = add_query_arg(array(
-            'action' => 'confirm_supporter',
-            'email' => urlencode($email),
-            'token' => wp_create_nonce('confirm_supporter_' . $email)
-        ), home_url());
-
+        // Einfache Bestätigungsmail senden
         $message = "Vielen Dank für Ihre Unterstützung!\n\n";
-        $message .= "Bitte bestätigen Sie Ihre E-Mail-Adresse, indem Sie auf den folgenden Link klicken:\n";
-        $message .= $confirmation_link;
+        $message .= "Wir haben Ihren Eintrag erhalten und werden ihn überprüfen. ";
+        $message .= "Sobald er freigegeben wurde, wird er auf unserer Website erscheinen.\n\n";
+        $message .= "Mit freundlichen Grüßen\n";
+        $message .= "Ihr Support-Team";
 
-        wp_mail($email, 'Bitte bestätigen Sie Ihre Unterstützung', $message);
+        wp_mail($email, 'Vielen Dank für Ihre Unterstützung', $message);
 
-        // Umleitung zur gleichen Seite, um das Formular zurückzusetzen
+        // Umleitung zur gleichen Seite, um das Formular auszublenden
         wp_safe_redirect(add_query_arg('supporter_submitted', '1', wp_get_referer()));
         exit;
     }
 }
 add_action('init', 'process_supporter_form');
-
-// Funktion zur Bestätigung der E-Mail-Adresse
-function confirm_supporter_email() {
-    if (isset($_GET['action']) && $_GET['action'] == 'confirm_supporter' && isset($_GET['email']) && isset($_GET['token'])) {
-        $email = urldecode($_GET['email']);
-        $token = $_GET['token'];
-
-        if (wp_verify_nonce($token, 'confirm_supporter_' . $email)) {
-            global $wpdb;
-            $table_name = $wpdb->prefix . 'supporters';
-            $wpdb->update(
-                $table_name,
-                array('status' => 1), // Status auf "bestätigt" setzen
-                array('email' => $email)
-            );
-            wp_die('Vielen Dank! Ihre E-Mail-Adresse wurde erfolgreich bestätigt.');
-        } else {
-            wp_die('Ungültiger Bestätigungslink. Bitte versuchen Sie es erneut oder kontaktieren Sie uns.');
-        }
-    }
-}
-add_action('init', 'confirm_supporter_email');
