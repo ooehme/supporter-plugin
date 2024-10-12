@@ -22,6 +22,19 @@ function supporter_install() {
     dbDelta($sql);
 }
 
+// Funktion zum Deinstallieren des Plugins
+function supporter_uninstall() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'supporters';
+    
+    // Tabelle aus der Datenbank löschen
+    $sql = "DROP TABLE IF EXISTS $table_name;";
+    $wpdb->query($sql);
+}
+
+// Registriere die Deinstallationsfunktion
+register_uninstall_hook(__FILE__, 'supporter_uninstall');
+
 // Backend-Verwaltungsseite
 function supporter_admin_menu() {
     add_menu_page(
