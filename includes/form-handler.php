@@ -30,6 +30,24 @@ function supporter_form_shortcode() {
 }
 add_shortcode('supporter_form', 'supporter_form_shortcode');
 
+function display_supporters() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'supporters';
+    $results = $wpdb->get_results("SELECT * FROM $table_name WHERE status = 1");
+
+    if ($results) {
+        foreach ($results as $supporter) {
+            echo '<div>';
+            echo '<h3>' . esc_html($supporter->name) . ' aus ' . esc_html($supporter->region) . '</h3>';
+            echo '<p>' . esc_html($supporter->occupation) . ': ' . esc_html($supporter->message) . '</p>';
+            echo '</div>';
+        }
+    } else {
+        echo 'Noch keine Unterstützer.';
+    }
+}
+add_shortcode('supporter_list', 'display_supporters');
+
 function process_supporter_form() {
     if (isset($_POST['submit_supporter'])) {
         $name = sanitize_text_field($_POST['name']);
