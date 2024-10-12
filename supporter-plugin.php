@@ -3,7 +3,9 @@
 Plugin Name: Unterstützer-Formular Plugin
 Description: Ein einfaches Plugin, um Unterstützerdaten zu erfassen und zu verwalten.
 Version: 1.0
-Author: Oliver OEhme
+Author: Oliver Oehme
+License: GPL2
+GitHub Plugin URI: https://github.com/ooehme/supporter-plugin
 */
 
 // Laden von zusätzlichen Dateien
