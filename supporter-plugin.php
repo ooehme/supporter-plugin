@@ -2,7 +2,7 @@
 /*
 Plugin Name: Unterstützer-Formular Plugin
 Description: Ein einfaches Plugin, um Unterstützerdaten zu erfassen und zu verwalten.
-Version: 1.1
+Version: 1.2
 Author: Oliver Oehme
 License: GPL2
 GitHub Plugin URI: https://github.com/ooehme/supporter-plugin
@@ -48,6 +48,19 @@ add_action('wp_enqueue_scripts', 'supporter_enqueue_styles');
 function supporter_start_session() {
     if (!session_id()) {
         session_start();
+    }
+    
+    // Überprüfe, ob eine Formular-Nachricht in der Session gespeichert ist
+    if (isset($_SESSION['supporter_form_message'])) {
+        // Füge die Nachricht als Query-Parameter zur URL hinzu
+        add_filter('the_content', function($content) {
+            if (is_page()) {  // Nur auf Seiten, nicht auf Beiträgen
+                $content = '<div class="supporter-message">' . $_SESSION['supporter_form_message'] . '</div>' . $content;
+            }
+            return $content;
+        });
+        // Lösche die Nachricht aus der Session
+        unset($_SESSION['supporter_form_message']);
     }
 }
 add_action('init', 'supporter_start_session');
