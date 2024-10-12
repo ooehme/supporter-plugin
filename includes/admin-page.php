@@ -51,7 +51,7 @@ function supporter_admin_page() {
     }
     
     echo '<table class="wp-list-table widefat fixed striped">';
-    echo '<thead><tr><th>Name</th><th>E-Mail</th><th>Tätigkeit</th><th>Region</th><th>Status</th><th>Aktionen</th></tr></thead>';
+    echo '<thead><tr><th>Name</th><th>E-Mail</th><th>Tätigkeit</th><th>Region</th><th>Nachricht</th><th>Status</th><th>Aktionen</th></tr></thead>';
     echo '<tbody>';
     foreach ($supporters as $supporter) {
         echo '<tr>';
@@ -59,6 +59,7 @@ function supporter_admin_page() {
         echo '<td>' . esc_html($supporter->email) . '</td>';
         echo '<td>' . esc_html($supporter->occupation) . '</td>';
         echo '<td>' . esc_html($supporter->region) . '</td>';
+        echo '<td>' . esc_html($supporter->message) . '</td>';
         echo '<td>' . ($supporter->status == 1 ? 'Freigegeben' : 'Ausstehend') . '</td>';
         echo '<td>';
         if ($supporter->status == 0) {
