@@ -1,7 +1,101 @@
-.supporter-form {
-    /* Formulargestaltung */
+/* Allgemeine Stile */
+.supporter-form,
+.supporters-list {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.supporter-list {
-    /* Unterstützerliste gestalten */
+/* Formular-Stile */
+.supporter-form form {
+    display: grid;
+    gap: 1rem;
+}
+
+.supporter-form label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.supporter-form input[type="text"],
+.supporter-form input[type="email"],
+.supporter-form textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.supporter-form textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.supporter-form input[type="checkbox"] {
+    margin-right: 0.5rem;
+}
+
+.supporter-form input[type="submit"] {
+    background-color: #0073aa;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.supporter-form input[type="submit"]:hover {
+    background-color: #005177;
+}
+
+/* Unterstützerliste Stile */
+.supporters-list {
+    display: grid;
+    gap: 2rem;
+}
+
+.supporter-item {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.supporter-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.supporter-item h3 {
+    margin-top: 0;
+    color: #0073aa;
+}
+
+/* Nachrichtenstile */
+.supporter-message {
+    background-color: #e7f5ff;
+    border-left: 4px solid #0073aa;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0 4px 4px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .supporter-form,
+    .supporters-list {
+        padding: 1rem;
+    }
+    
+    .supporter-form input[type="submit"] {
+        width: 100%;
+    }
 }
